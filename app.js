@@ -1,57 +1,41 @@
-const carrito = document.getElementById("carrito")
-const template = document.querySelector("#template")
-const fragment = document.createDocumentFragment()
-const btnesBotones = document.querySelectorAll(".card .btn")
+const carrito = document.querySelector("#carrito");
+const template = document.querySelector("#template");
+const btnBotones = document.querySelectorAll(".btn ");
+const fragment = document.createDocumentFragment();
+
+const carritoProducto = {}
 
 
-// para almacenar las frutas
-
-const carritoObjeto = {}
-
-// funcion para agregar al carrito
 const agregarAlCarrito = (e) => {
     console.log(e.target.dataset.fruta)
 
     const producto = {
         titulo: e.target.dataset.fruta,
         id: e.target.dataset.fruta,
-        cantidad:1,
+        cantidad: 1,
+    }
+    if(carritoProducto.hasOwnProperty(producto.titulo)){
+        producto.cantidad= carritoProducto[producto.titulo].cantidad + 1
+    }
+       
+    
+       carritoProducto[producto.titulo] = producto
+
+     pintarCarrito()
     }
 
-    if(carritoObjeto.hasOwnProperty(producto.titulo)){
-        producto.cantidad = carritoObjeto[producto.titulo].cantidad + 1
-    }
-
-
-    carritoObjeto[producto.titulo] = producto;
-
-    pintarCarrito(producto)
-    //console.log(carritoObjeto)
-}
-
-
-
-// para agregar cOSAS
-
-const pintarCarrito = (producto) => {
-
+const pintarCarrito = () => {
     carrito.textContent = ""
 
-    Object.values(carritoObjeto).forEach((item)=>{
+   Object.values(carritoProducto).forEach((item) => {
         const clone = template.content.firstElementChild.cloneNode(true)
         clone.querySelector(".lead").textContent = item.titulo
         clone.querySelector(".badge").textContent = item.cantidad
-
+        
         fragment.appendChild(clone)
-
     })
 
     carrito.appendChild(fragment)
 }
 
-
-//funcion que hara el recorrido de cada boton agregar
-
-
-
-btnesBotones.forEach((btn) => btn.addEventListener("click", agregarAlCarrito))
+btnBotones.forEach((btn) => btn.addEventListener("click", agregarAlCarrito))
